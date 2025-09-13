@@ -270,8 +270,7 @@ public class HudConfigStorage implements IConfigHandler {
 
     public static void loadFromFile() {
         File configFile =
-                FileUtils.getConfigDirectory()
-                        .toPath()
+                FileUtils.getConfigDirectoryAsPath()
                         .resolve("advancedchat")
                         .resolve(CONFIG_FILE_NAME)
                         .toFile();
@@ -314,7 +313,7 @@ public class HudConfigStorage implements IConfigHandler {
     }
 
     public static void saveFromFile() {
-        File dir = FileUtils.getConfigDirectory().toPath().resolve("advancedchat").toFile();
+        File dir = FileUtils.getConfigDirectoryAsPath().resolve("advancedchat").toFile();
 
         if ((dir.exists() && dir.isDirectory()) || dir.mkdirs()) {
             ChatTab.ChatTabJsonSave tabJson = new ChatTab.ChatTabJsonSave();
@@ -419,7 +418,7 @@ public class HudConfigStorage implements IConfigHandler {
 
         Visibility(String configString) {
             this.texture =
-                    new Identifier(
+                    Identifier.of(
                             AdvancedChatHud.MOD_ID,
                             "textures/gui/chatwindow/" + configString + ".png");
             this.configString = configString;

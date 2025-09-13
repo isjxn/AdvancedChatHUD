@@ -16,6 +16,7 @@ import io.github.darkkronicle.advancedchatcore.util.TextUtil;
 import io.github.darkkronicle.advancedchathud.config.HudConfigStorage;
 import io.github.darkkronicle.advancedchathud.itf.IChatHud;
 import io.github.darkkronicle.advancedchathud.tabs.AbstractChatTab;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.sound.SoundEvents;
@@ -36,7 +37,7 @@ public class TabButton extends CleanButton {
     }
 
     @Override
-    public void render(int mouseX, int mouseY, boolean unused, MatrixStack matrixStack) {
+    public void render(DrawContext drawContext, int mouseX, int mouseY, boolean selected) {
         int relMX = mouseX - x;
         int relMY = mouseY - y;
         hovered = relMX >= 0 && relMX <= width && relMY >= 0 && relMY <= height;
@@ -45,7 +46,7 @@ public class TabButton extends CleanButton {
             color = Colors.getInstance().getColorOrWhite("hover").withAlpha(color.alpha());
         }
 
-        boolean selected = false;
+        selected = false;
         if (HudConfigStorage.General.VANILLA_HUD.config.getBooleanValue()) {
             selected = IChatHud.getInstance().getTab().equals(tab);
         } else {
@@ -58,18 +59,17 @@ public class TabButton extends CleanButton {
             color = new Color(color.red() / 2, color.green() / 2, color.blue() / 2, 100);
         }
 
-        RenderUtils.drawRect(x, y, width, height, color.color());
+        RenderUtils.drawRect(drawContext, x, y, width, height, color.color());
 
-        drawStringWithShadow(
-                x + PADDING, y + PADDING, selected ? WHITE : GRAY, displayString, matrixStack);
+        drawStringWithShadow(drawContext,
+                x + PADDING, y + PADDING, selected ? WHITE : GRAY, displayString);
         if (tab.isShowUnread() && tab.getUnread() > 0) {
             String unread = TextUtil.toSuperscript(Math.min(tab.getUnread(), 99));
-            drawCenteredString(
+            drawCenteredString(drawContext,
                     x + width - ((UNREAD_WIDTH + PADDING) / 2) - 1,
                     y + PADDING,
                     RED,
-                    unread,
-                    matrixStack);
+                    unread);
         }
     }
 

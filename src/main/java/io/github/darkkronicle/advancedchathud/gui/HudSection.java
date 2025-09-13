@@ -27,6 +27,7 @@ import io.github.darkkronicle.advancedchathud.tabs.CustomChatTab;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Style;
@@ -47,10 +48,10 @@ import java.util.List;
 public class HudSection extends AdvancedChatScreenSection {
 
     private static final Identifier ADD_ICON =
-            new Identifier(AdvancedChatHud.MOD_ID, "textures/gui/chatwindow/add_window.png");
+            Identifier.of(AdvancedChatHud.MOD_ID, "textures/gui/chatwindow/add_window.png");
 
     private static final Identifier RESET_ICON =
-            new Identifier(AdvancedChatHud.MOD_ID, "textures/gui/chatwindow/reset_windows.png");
+            Identifier.of(AdvancedChatHud.MOD_ID, "textures/gui/chatwindow/reset_windows.png");
 
     private ContextMenu menu = null;
 
@@ -101,15 +102,15 @@ public class HudSection extends AdvancedChatScreenSection {
             AbstractChatTab tab = chatWindow.getTab();
             if (tab instanceof CustomChatTab custom) {
                 getScreen().getChatField().setText(custom.getStartingMessage());
-                getScreen().getChatField().setCursor(custom.getStartingMessage().length());
+                getScreen().getChatField().setCursor(custom.getStartingMessage().length(), false);
             }
         }
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    public void render(DrawContext context, int mouseX, int mouseY, float deltaTicks) {
         if (menu != null) {
-            menu.render(mouseX, mouseY, true, matrixStack);
+            menu.render(context, mouseX, mouseY, true);
         }
     }
 

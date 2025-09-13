@@ -102,7 +102,7 @@ public class MainChatTab extends AbstractChatTab {
         });
         allChatTabs.addAll(customChatTabs);
 
-        Path konstructDir = FileUtils.getConfigDirectory().toPath().resolve("advancedchat").resolve("konstructTabs");
+        Path konstructDir = FileUtils.getConfigDirectoryAsPath().resolve("advancedchat").resolve("konstructTabs");
         konstructDir.toFile().mkdirs();
 
         processor = AdvancedChatKonstruct.getInstance().copy();
