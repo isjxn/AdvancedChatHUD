@@ -19,6 +19,7 @@ import io.github.darkkronicle.advancedchatcore.gui.buttons.NamedSimpleButton;
 import io.github.darkkronicle.advancedchathud.AdvancedChatHud;
 import io.github.darkkronicle.advancedchathud.config.ChatTab;
 import io.github.darkkronicle.advancedchathud.config.HudConfigStorage;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 
 /** Screen for importing and exporting {@link ChatTab}. */
@@ -79,5 +80,14 @@ public class SharingScreen extends GuiBase {
                 Message.MessageType.SUCCESS,
                 5000,
                 StringUtils.translate("advancedchat.gui.message.successful"));
+    }
+
+    @Override
+    public void resize(MinecraftClient mc, int width, int height) {
+        this.width = width;
+        this.height = height;
+
+        clearElements();
+        init();
     }
 }

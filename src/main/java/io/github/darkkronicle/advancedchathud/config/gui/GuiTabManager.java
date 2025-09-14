@@ -16,6 +16,7 @@ import io.github.darkkronicle.advancedchatcore.gui.buttons.NamedSimpleButton;
 import io.github.darkkronicle.advancedchathud.AdvancedChatHud;
 import io.github.darkkronicle.advancedchathud.config.ChatTab;
 import io.github.darkkronicle.advancedchathud.config.HudConfigStorage;
+import net.minecraft.client.MinecraftClient;
 
 public class GuiTabManager extends ConfigGuiListBase<ChatTab, WidgetTabEntry, WidgetListTabs> {
 
@@ -50,5 +51,14 @@ public class GuiTabManager extends ConfigGuiListBase<ChatTab, WidgetTabEntry, Wi
         ButtonGeneric button = new NamedSimpleButton(x, y, StringUtils.translate(translation), false);
         this.addButton(button, listener);
         return button.getWidth();
+    }
+
+    @Override
+    public void resize(MinecraftClient mc, int width, int height) {
+        this.width = width;
+        this.height = height;
+
+        clearElements();
+        initGui();
     }
 }
