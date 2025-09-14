@@ -11,7 +11,7 @@ public class ScissorUtil {
     }
 
     public static void applyScissorBox(DrawContext drawContext, int x, int y, int width, int height) {
-        drawContext.enableScissor(x, y, width, height);
+        drawContext.enableScissor(x, y, width + x, height + y);
     }
 
     public static void applyScissor(DrawContext drawContext, int x1, int y1, int x2, int y2) {

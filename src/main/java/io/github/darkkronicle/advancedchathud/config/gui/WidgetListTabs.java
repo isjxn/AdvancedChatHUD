@@ -11,10 +11,11 @@ import fi.dy.masa.malilib.gui.interfaces.ISelectionListener;
 import io.github.darkkronicle.advancedchatcore.gui.WidgetConfigList;
 import io.github.darkkronicle.advancedchathud.config.ChatTab;
 import io.github.darkkronicle.advancedchathud.config.HudConfigStorage;
+import net.minecraft.client.gui.screen.Screen;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import net.minecraft.client.gui.screen.Screen;
 
 public class WidgetListTabs extends WidgetConfigList<ChatTab, WidgetTabEntry> {
 

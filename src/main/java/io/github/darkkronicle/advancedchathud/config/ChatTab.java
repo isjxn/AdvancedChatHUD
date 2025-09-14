@@ -22,15 +22,16 @@ import io.github.darkkronicle.advancedchatcore.interfaces.IJsonSave;
 import io.github.darkkronicle.advancedchatcore.util.Colors;
 import io.github.darkkronicle.advancedchatcore.util.FindType;
 import io.github.darkkronicle.advancedchathud.AdvancedChatHud;
+import lombok.Data;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import lombok.Data;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 
 @Data
 @Environment(EnvType.CLIENT)
