@@ -303,8 +303,7 @@ public class HudConfigStorage implements IConfigHandler {
                     WindowManager.getInstance().loadFromJson(null);
                 }
 
-                ConfigStorage.readOptions(
-                        root, General.NAME, (List<SaveableConfig<?>>) General.OPTIONS);
+                ConfigStorage.readOptions(root, General.NAME, General.OPTIONS);
 
                 int version = JsonUtils.getIntegerOrDefault(root, "configVersion", 0);
             }
@@ -318,8 +317,7 @@ public class HudConfigStorage implements IConfigHandler {
             ChatTab.ChatTabJsonSave tabJson = new ChatTab.ChatTabJsonSave();
             JsonObject root = new JsonObject();
 
-            ConfigStorage.writeOptions(
-                    root, General.NAME, (List<SaveableConfig<?>>) General.OPTIONS);
+            ConfigStorage.writeOptions(root, General.NAME, General.OPTIONS);
 
             root.add("maintab", tabJson.save(MAIN_TAB));
 
