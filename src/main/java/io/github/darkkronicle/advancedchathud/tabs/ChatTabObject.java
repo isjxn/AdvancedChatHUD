@@ -18,7 +18,6 @@ import io.github.darkkronicle.Konstruct.type.IntegerObject;
 import io.github.darkkronicle.Konstruct.type.KonstructObject;
 import io.github.darkkronicle.Konstruct.type.NullObject;
 import io.github.darkkronicle.advancedchatcore.util.Color;
-import io.github.darkkronicle.advancedchathud.config.ChatTab;
 import lombok.Getter;
 
 import java.util.List;

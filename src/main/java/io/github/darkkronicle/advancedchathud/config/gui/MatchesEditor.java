@@ -20,6 +20,7 @@ import io.github.darkkronicle.advancedchatcore.util.FindType;
 import io.github.darkkronicle.advancedchathud.AdvancedChatHud;
 import io.github.darkkronicle.advancedchathud.config.ChatTab;
 import io.github.darkkronicle.advancedchathud.config.Match;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 
 public class MatchesEditor extends CoreGuiListBase<Match, WidgetMatchEntry, WidgetListMatches>
@@ -55,6 +56,15 @@ public class MatchesEditor extends CoreGuiListBase<Match, WidgetMatchEntry, Widg
         getListWidget().save();
         AdvancedChatHud.MAIN_CHAT_TAB.setUpTabs();
         super.closeGui(showParent);
+    }
+
+    @Override
+    public void resize(MinecraftClient mc, int width, int height) {
+        this.width = width;
+        this.height = height;
+
+        clearElements();
+        initGui();
     }
 
     @Override

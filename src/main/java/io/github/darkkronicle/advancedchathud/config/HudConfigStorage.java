@@ -26,18 +26,17 @@ import io.github.darkkronicle.advancedchatcore.config.ConfigStorage;
 import io.github.darkkronicle.advancedchatcore.config.SaveableConfig;
 import io.github.darkkronicle.advancedchatcore.config.options.ConfigColor;
 import io.github.darkkronicle.advancedchatcore.util.Colors;
-import io.github.darkkronicle.advancedchatcore.util.EasingMethod;
 import io.github.darkkronicle.advancedchathud.AdvancedChatHud;
 import io.github.darkkronicle.advancedchathud.gui.WindowManager;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
 import io.github.darkkronicle.advancedchathud.tabs.MainChatTab;
 import lombok.Getter;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.util.Identifier;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 @Environment(EnvType.CLIENT)
 public class HudConfigStorage implements IConfigHandler {
@@ -270,8 +269,7 @@ public class HudConfigStorage implements IConfigHandler {
 
     public static void loadFromFile() {
         File configFile =
-                FileUtils.getConfigDirectory()
-                        .toPath()
+                FileUtils.getConfigDirectoryAsPath()
                         .resolve("advancedchat")
                         .resolve(CONFIG_FILE_NAME)
                         .toFile();
@@ -314,7 +312,7 @@ public class HudConfigStorage implements IConfigHandler {
     }
 
     public static void saveFromFile() {
-        File dir = FileUtils.getConfigDirectory().toPath().resolve("advancedchat").toFile();
+        File dir = FileUtils.getConfigDirectoryAsPath().resolve("advancedchat").toFile();
 
         if ((dir.exists() && dir.isDirectory()) || dir.mkdirs()) {
             ChatTab.ChatTabJsonSave tabJson = new ChatTab.ChatTabJsonSave();

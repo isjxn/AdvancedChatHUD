@@ -8,11 +8,12 @@
 package io.github.darkkronicle.advancedchathud.tabs;
 
 import io.github.darkkronicle.advancedchatcore.util.Color;
-import java.util.UUID;
 import lombok.Data;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.text.Text;
+
+import java.util.UUID;
 
 /** Base ChatTab that allows for custom chat tabs in AdvancedChatHud. */
 @Environment(EnvType.CLIENT)

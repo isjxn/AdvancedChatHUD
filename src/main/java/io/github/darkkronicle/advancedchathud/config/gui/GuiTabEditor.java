@@ -23,9 +23,11 @@ import io.github.darkkronicle.advancedchatcore.gui.buttons.NamedSimpleButton;
 import io.github.darkkronicle.advancedchatcore.interfaces.IClosable;
 import io.github.darkkronicle.advancedchathud.AdvancedChatHud;
 import io.github.darkkronicle.advancedchathud.config.ChatTab;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.Screen;
+
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.client.gui.screen.Screen;
 
 public class GuiTabEditor extends GuiConfigsBase implements IClosable {
 
@@ -106,6 +108,15 @@ public class GuiTabEditor extends GuiConfigsBase implements IClosable {
 
     public void save() {
         AdvancedChatHud.MAIN_CHAT_TAB.setUpTabs();
+    }
+
+    @Override
+    public void resize(MinecraftClient mc, int width, int height) {
+        this.width = width;
+        this.height = height;
+
+        clearElements();
+        initGui();
     }
 
     @Override

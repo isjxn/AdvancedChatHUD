@@ -8,8 +8,6 @@
 package io.github.darkkronicle.advancedchathud.gui;
 
 import com.google.gson.JsonObject;
-import com.mojang.blaze3d.systems.RenderSystem;
-import fi.dy.masa.malilib.render.RenderUtils;
 import fi.dy.masa.malilib.util.StringUtils;
 import io.github.darkkronicle.advancedchatcore.chat.ChatMessage;
 import io.github.darkkronicle.advancedchatcore.config.ConfigStorage;
@@ -20,25 +18,25 @@ import io.github.darkkronicle.advancedchathud.HudChatMessage;
 import io.github.darkkronicle.advancedchathud.HudChatMessageHolder;
 import io.github.darkkronicle.advancedchathud.config.HudConfigStorage;
 import io.github.darkkronicle.advancedchathud.tabs.AbstractChatTab;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 import io.github.darkkronicle.advancedchathud.util.ScissorUtil;
 import lombok.Getter;
 import lombok.Setter;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.sound.PositionedSoundInstance;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.text.TextColor;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 @Environment(EnvType.CLIENT)
 public class ChatWindow {
@@ -50,38 +48,54 @@ public class ChatWindow {
     private long lastScroll = 0;
     private int scrollDuration = 200;
 
-    @Getter @Setter private double yPercent;
+    @Getter
+    @Setter
+    private double yPercent;
 
-    @Getter @Setter private double xPercent;
+    @Getter
+    @Setter
+    private double xPercent;
 
-    @Getter @Setter private double widthPercent;
+    @Getter
+    @Setter
+    private double widthPercent;
 
-    @Getter @Setter private double heightPercent;
+    @Getter
+    @Setter
+    private double heightPercent;
 
-    @Getter @Setter private boolean renderRight = false;
+    @Getter
+    @Setter
+    private boolean renderRight = false;
 
-    @Getter @Setter private boolean minimalist = false;
+    @Getter
+    @Setter
+    private boolean minimalist = false;
 
-    @Getter @Setter private boolean renderTopFirst = false;
+    @Getter
+    @Setter
+    private boolean renderTopFirst = false;
 
     private final MinecraftClient client;
 
-    @Setter @Getter
+    @Setter
+    @Getter
     private HudConfigStorage.Visibility visibility =
             (HudConfigStorage.Visibility)
                     HudConfigStorage.General.VISIBILITY.config.getOptionListValue();
 
     private List<ChatMessage> lines;
 
-    @Getter @Setter private boolean selected;
+    @Getter
+    @Setter
+    private boolean selected;
 
-    @Getter private AbstractChatTab tab;
+    @Getter
+    private AbstractChatTab tab;
 
-    private static final Identifier X_ICON =
-            Identifier.of(AdvancedChatHud.MOD_ID, "textures/gui/chatwindow/x_icon.png");
+    private static final Identifier X_ICON = Identifier.of(AdvancedChatHud.MOD_ID, "textures/gui/chatwindow/x_icon.png");
 
-    private static final Identifier RESIZE_ICON =
-            Identifier.of(AdvancedChatHud.MOD_ID, "textures/gui/chatwindow/resize_icon.png");
+    private static final Identifier RESIZE_ICON = Identifier.of(AdvancedChatHud.MOD_ID, "textures/gui/chatwindow/resize_icon.png");
 
     public ChatWindow(AbstractChatTab tab) {
         this.client = MinecraftClient.getInstance();
@@ -208,20 +222,20 @@ public class ChatWindow {
     }
 
     public static void drawRect(
-            DrawContext context, int x, int y, int width, int height, int color) {
-        context.fill(x, y, x + width, y + height, color);
+            DrawContext drawContext, int x, int y, int width, int height, int color) {
+        drawContext.fill(x, y, x + width, y + height, color);
     }
 
-    public static void fill(DrawContext context, int x, int y, int x2, int y2, int color) {
-        context.fill(x, y, x2, y2, color);
+    public static void fill(DrawContext drawContext, int x, int y, int x2, int y2, int color) {
+        drawContext.fill(x, y, x2, y2, color);
     }
 
     private static void drawOutline(
-            DrawContext context, int x, int y, int width, int height, int color) {
-        drawRect(context, x, y, 1, height, color);
-        drawRect(context, x + width - 1, y, 1, height, color);
-        drawRect(context, x + 1, y, width - 2, 1, color);
-        drawRect(context, x + 1, y + height - 1, width - 2, 1, color);
+            DrawContext drawContext, int x, int y, int width, int height, int color) {
+        drawRect(drawContext, x, y, 1, height, color);
+        drawRect(drawContext, x + width - 1, y, 1, height, color);
+        drawRect(drawContext, x + 1, y, width - 2, 1, color);
+        drawRect(drawContext, x + 1, y + height - 1, width - 2, 1, color);
     }
 
     public void resetScroll() {
@@ -253,9 +267,9 @@ public class ChatWindow {
     private int getPaddedLeftX() {
         return (getLeftX()
                 + (int)
-                        Math.ceil(
-                                HudConfigStorage.General.LEFT_PAD.config.getIntegerValue()
-                                        + (renderRight ? 0 : headOffset())));
+                Math.ceil(
+                        HudConfigStorage.General.LEFT_PAD.config.getIntegerValue()
+                                + (renderRight ? 0 : headOffset())));
     }
 
     private double getScale() {
@@ -303,7 +317,7 @@ public class ChatWindow {
         return getTotalLines() * HudConfigStorage.General.LINE_SPACE.config.getIntegerValue() + (lines.size() - 1) * HudConfigStorage.General.MESSAGE_SPACE.config.getIntegerValue();
     }
 
-    public void render(DrawContext context, int ticks, boolean focused) {
+    public void render(DrawContext drawContext, int ticks, boolean focused) {
         if (!focused) {
             resetScroll();
         }
@@ -321,9 +335,6 @@ public class ChatWindow {
             scrolledHeight = totalHeight;
         }
 
-        context.getMatrices().push();
-        context.getMatrices().scale((float) getScale(), (float) getScale(), 1);
-
         int lines = 0;
         int currentHeight = 0;
         int renderedLines = 0;
@@ -338,14 +349,15 @@ public class ChatWindow {
         LimitedInteger y =
                 new LimitedInteger(
                         getScaledHeight() - HudConfigStorage.General.TOP_PAD.config.getIntegerValue() + (HudConfigStorage.General.MESSAGE_SPACE.config.getIntegerValue() + HudConfigStorage.General.LINE_SPACE.config.getIntegerValue() * (renderTopFirst ? 2 : 1)),
-                        renderTopFirst ? HudConfigStorage.General.TOP_PAD.config.getIntegerValue() + HudConfigStorage.General.LINE_SPACE.config.getIntegerValue(): HudConfigStorage.General.BOTTOM_PAD.config.getIntegerValue());
+                        renderTopFirst ? HudConfigStorage.General.TOP_PAD.config.getIntegerValue() + HudConfigStorage.General.LINE_SPACE.config.getIntegerValue() : HudConfigStorage.General.BOTTOM_PAD.config.getIntegerValue());
 
-        double scale = client.getWindow().getScaleFactor();
         ScissorUtil.applyScissorBox(
-                (int) (getConvertedX() * scale),
-                (int) ((client.getWindow().getScaledHeight() - getConvertedY()) * scale),
-                (int) (getConvertedWidth() * scale),
-                (int) (getConvertedHeight() * scale));
+                drawContext,
+                (int) (getConvertedX()),
+                (int) (getConvertedY() - getConvertedHeight()),
+                (int) (getConvertedWidth()),
+                (int) (getConvertedHeight()));
+
         boolean foundScroll = false;
         for (int j = 0; j < this.lines.size(); j++) {
             ChatMessage message = this.lines.get(j);
@@ -369,7 +381,7 @@ public class ChatWindow {
                 }
                 ChatMessage.AdvancedChatLine line = message.getLines().get(renderTopFirst ? message.getLineCount() - i - 1 : i);
                 drawLine(
-                        context,
+                        drawContext,
                         line,
                         leftX,
                         renderTopFirst ? limit - y.getValue() + client.textRenderer.fontHeight : y.getValue(),
@@ -394,7 +406,7 @@ public class ChatWindow {
             }
             currentHeight += HudConfigStorage.General.MESSAGE_SPACE.config.getIntegerValue();
         }
-        ScissorUtil.resetScissor();
+        ScissorUtil.resetScissor(drawContext);
         if (renderedLines == 0) {
             y.setValue(0);
         }
@@ -407,7 +419,7 @@ public class ChatWindow {
 
         if (focused && !isMinimalist()) {
             drawOutline(
-                    context,
+                    drawContext,
                     leftX,
                     getActualY(0) - scaledHeight - 1,
                     scaledWidth,
@@ -418,34 +430,35 @@ public class ChatWindow {
             String label = tab.getAbbreviation();
             int labelWidth = StringUtils.getStringWidth(label) + 8;
             drawRect(
-                    context,
+                    drawContext,
                     leftX,
                     getActualY(newY),
                     labelWidth,
                     scaledBar,
                     tab.getMainColor().color());
             drawOutline(
-                    context,
+                    drawContext,
                     leftX,
                     getActualY(newY),
                     labelWidth,
                     scaledBar,
                     tab.getBorderColor().color());
-            context.drawCenteredTextWithShadow(
+            drawContext.drawCenteredTextWithShadow(
                     MinecraftClient.getInstance().textRenderer,
                     tab.getAbbreviation(),
                     leftX + (labelWidth) / 2,
                     getActualY(newY - 3),
-                    Colors.getInstance().getColorOrWhite("white").color());
+                    Colors.getInstance().getColorOrWhite("white").color()
+            );
             drawRect(
-                    context,
+                    drawContext,
                     leftX + labelWidth,
                     getActualY(newY),
                     getScaledWidth() - labelWidth,
                     scaledBar,
                     selected ? tab.getMainColor().color() : tab.getInnerColor().color());
             drawOutline(
-                    context,
+                    drawContext,
                     leftX + labelWidth,
                     getActualY(newY),
                     getScaledWidth() - labelWidth,
@@ -453,21 +466,21 @@ public class ChatWindow {
                     tab.getBorderColor().color());
 
             drawOutline(
-                    context,
+                    drawContext,
                     rightX - scaledBar,
                     getActualY(newY),
                     scaledBar,
                     scaledBar,
                     tab.getBorderColor().color());
             drawOutline(
-                    context,
+                    drawContext,
                     rightX - scaledBar * 2 + 1,
                     getActualY(newY),
                     scaledBar,
                     scaledBar,
                     tab.getBorderColor().color());
             drawOutline(
-                    context,
+                    drawContext,
                     rightX - scaledBar * 3 + 2,
                     getActualY(newY),
                     scaledBar,
@@ -475,47 +488,45 @@ public class ChatWindow {
                     tab.getBorderColor().color());
 
             // Close
-            RenderUtils.color(1, 1, 1, 1);
-            RenderUtils.bindTexture(X_ICON);
-            context.drawTexture(
+            drawContext.drawTexture(
+                    RenderPipelines.GUI_TEXTURED,
                     X_ICON,
                     rightX - scaledBar + 1,
                     getActualY(newY - 1),
-                    scaledBar - 2,
-                    scaledBar - 2,
                     0,
                     0,
+                    scaledBar - 2,
+                    scaledBar - 2,
                     32,
                     32,
                     32,
                     32);
 
             // Resize
-            RenderUtils.color(1, 1, 1, 1);
-            RenderUtils.bindTexture(RESIZE_ICON);
-            context.drawTexture(
+            drawContext.drawTexture(
+                    RenderPipelines.GUI_TEXTURED,
                     RESIZE_ICON,
                     rightX - scaledBar * 2 + 2,
                     getActualY(newY - 1),
-                    scaledBar - 2,
-                    scaledBar - 2,
                     0,
                     0,
+                    scaledBar - 2,
+                    scaledBar - 2,
                     32,
                     32,
                     32,
                     32);
 
             // Visibility
-            RenderUtils.bindTexture(visibility.getTexture());
-            context.drawTexture(
+            drawContext.drawTexture(
+                    RenderPipelines.GUI_TEXTURED,
                     visibility.getTexture(),
                     rightX - scaledBar * 3 + 3,
                     getActualY(newY - 1),
-                    scaledBar - 2,
-                    scaledBar - 2,
                     0,
                     0,
+                    scaledBar - 2,
+                    scaledBar - 2,
                     32,
                     32,
                     32,
@@ -524,7 +535,7 @@ public class ChatWindow {
             double mouseX = client.mouse.getX() / 2;
             double mouseY = client.mouse.getY() / 2;
             if (isMouseOverVisibility(mouseX, mouseY)) {
-                context.drawCenteredTextWithShadow(
+                drawContext.drawCenteredTextWithShadow(
                         client.textRenderer,
                         visibility.getDisplayName(),
                         (int) (mouseX / getScale() + 4),
@@ -537,7 +548,7 @@ public class ChatWindow {
             if (y.getValue() < getScaledHeight()) {
                 // Check to see if we've already gone above the boundaries
                 fill(
-                        context,
+                        drawContext,
                         leftX,
                         getActualY(renderTopFirst ? limit - y.getValue() : y.getValue()),
                         rightX,
@@ -548,18 +559,17 @@ public class ChatWindow {
             float add = (float) (scrolledHeight) / (getTotalHeight());
             int scrollHeight = (int) (add * (getScaledHeight() - 10));
             drawRect(
-                    context,
+                    drawContext,
                     getScaledWidth() + leftX - 1,
                     getActualY(scrollHeight + 10),
                     1,
                     10,
                     Colors.getInstance().getColorOrWhite("white").color());
         }
-        context.getMatrices().pop();
     }
 
     private void drawLine(
-            DrawContext context,
+            DrawContext drawContext,
             ChatMessage.AdvancedChatLine line,
             int x,
             int y,
@@ -609,10 +619,10 @@ public class ChatWindow {
             applied =
                     1
                             - (float)
-                                    ((EasingMethod)
-                                                    HudConfigStorage.General.FADE_TYPE.config
-                                                            .getOptionListValue())
-                                            .apply(percent);
+                            ((EasingMethod)
+                                    HudConfigStorage.General.FADE_TYPE.config
+                                            .getOptionListValue())
+                                    .apply(percent);
             applied = Math.max(0, applied);
             if (applied <= 0) {
                 return;
@@ -642,30 +652,27 @@ public class ChatWindow {
 
         if (!focused
                 && HudConfigStorage.General.HUD_LINE_TYPE.config.getOptionListValue()
-                        == HudConfigStorage.HudLineType.COMPACT) {
+                == HudConfigStorage.HudLineType.COMPACT) {
             backgroundWidth = lineWidth + headOffset();
         } else {
             backgroundWidth = scaledWidth;
         }
 
-        // Draw background
+//         Draw background
         int backgroundY = getActualY(y);
         if (renderTopFirst && renderedLines == 0) {
             backgroundY -= 1 + HudConfigStorage.General.TOP_PAD.config.getIntegerValue();
         }
         if (renderRight) {
-            drawRect(context, x + (scaledWidth - backgroundWidth), backgroundY, backgroundWidth, height, background.color());
+            drawRect(drawContext, x + (scaledWidth - backgroundWidth), backgroundY, backgroundWidth, height, background.color());
         } else {
-            drawRect(context, x, backgroundY, backgroundWidth, height, background.color());
+            drawRect(drawContext, x, backgroundY, backgroundWidth, height, background.color());
         }
         if (lineIndex == line.getParent().getLineCount() - 1
                 && line.getParent().getOwner() != null
                 && HudConfigStorage.General.CHAT_HEADS.config.getBooleanValue()) {
-            // Allow head to be transparent
-            RenderUtils.setupBlend();
-            // Draw head
-            RenderSystem.setShaderColor(1, 1, 1, applied);
-            RenderSystem.setShaderTexture(0, line.getParent().getOwner().getTexture());
+            Identifier texture = line.getParent().getOwner().getTexture();
+
             int headX;
             if (renderRight) {
                 headX = pRX + 2;
@@ -673,14 +680,14 @@ public class ChatWindow {
                 headX = pLX - 10;
             }
             int headY = getActualY(y);
-            context.drawTexture(
-                    line.getParent().getOwner().getTexture(), headX, headY, 8, 8, 8, 8, 8, 8, 64, 64);
-            context.drawTexture(
-                    line.getParent().getOwner().getTexture(), headX, headY, 8, 8, 40, 8, 8, 8, 64, 64);
-            RenderSystem.setShaderColor(1, 1, 1, 1);
+            drawContext.drawTexture(RenderPipelines.GUI_TEXTURED, texture, headX, headY, 8, 8, 8, 8, 8, 8, 64, 64);
         }
-        context.drawTextWithShadow(
-                client.textRenderer, render.asOrderedText(), renderRight ? pRX - lineWidth : pLX, getActualY(y) + 1, text.color());
+
+        drawContext.drawTextWithShadow(MinecraftClient.getInstance().textRenderer,
+                render.asOrderedText(),
+                renderRight ? pRX - lineWidth : pLX,
+                getActualY(y) + 1,
+                text.color());
     }
 
     public Style getText(double mouseX, double mouseY) {
@@ -722,9 +729,9 @@ public class ChatWindow {
 
                 if (trueY <= y.getValue()
                         && trueY
-                                >= y.getValue()
-                                        - HudConfigStorage.General.LINE_SPACE.config
-                                                .getIntegerValue()) {
+                        >= y.getValue()
+                        - HudConfigStorage.General.LINE_SPACE.config
+                        .getIntegerValue()) {
                     ChatMessage.AdvancedChatLine line = message.getLines().get(i);
                     double truestX = trueX;
                     if (renderRight) {
@@ -741,11 +748,11 @@ public class ChatWindow {
                     break;
                 }
                 if (!y.isPossible(
-                                HudConfigStorage.General.LINE_SPACE.config.getIntegerValue()
-                                        + HudConfigStorage.General.MESSAGE_SPACE.config
-                                                .getIntegerValue())
+                        HudConfigStorage.General.LINE_SPACE.config.getIntegerValue()
+                                + HudConfigStorage.General.MESSAGE_SPACE.config
+                                .getIntegerValue())
                         || !y.incrementIfPossible(
-                                HudConfigStorage.General.MESSAGE_SPACE.config.getIntegerValue())) {
+                        HudConfigStorage.General.MESSAGE_SPACE.config.getIntegerValue())) {
                     break;
                 }
             }
