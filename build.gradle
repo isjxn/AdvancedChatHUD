@@ -4,8 +4,6 @@ plugins {
     id "io.freefair.lombok" version "8.10"
 }
 
-apply from: 'https://raw.githubusercontent.com/Scrupyy/GradleScripts/main/gradle/publish.gradle'
-
 sourceCompatibility = JavaVersion.VERSION_21
 targetCompatibility = JavaVersion.VERSION_21
 
@@ -23,7 +21,7 @@ repositories {
     maven { url 'https://masa.dy.fi/maven' }
     maven { url 'https://jitpack.io' }
     maven {
-        url = uri("https://maven.pkg.github.com/Scrupyy/AdvancedChatCore")
+        url = uri("https://maven.pkg.github.com/Arematics/AdvancedChatCore")
         credentials {
             username = project.findProperty("gpr.user") ?: System.getenv("GPR_USER")
             password = project.findProperty("gpr.key") ?: System.getenv("GPR_KEY")
@@ -37,7 +35,7 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
     modImplementation("com.github.sakura-ryoko:malilib:1.21.8-${project.malilib_version}")
-    modImplementation "com.scrupy:advancedchatcore:1.21.8-${project.advancedchat_version}"
+    modImplementation "com.arematics:advancedchatcore:${project.minecraft_version}-${project.advancedchat_version}"
     modImplementation 'com.github.DarkKronicle.Konstruct:core:2.0.3-build1'
 }
 
@@ -65,25 +63,4 @@ tasks.register('sourcesJar', Jar) {
 
 jar {
     from "LICENSE.txt"
-}
-
-// configure the maven publication
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            // add all the jars that should be included when publishing to maven
-            artifact(remapJar) {
-                builtBy remapJar
-            }
-            artifact(sourcesJar) {
-                builtBy remapSourcesJar
-            }
-        }
-    }
-
-    // select the repositories you want to publish to
-    repositories {
-        // uncomment to publish to the local maven
-        // mavenLocal()
-    }
 }
