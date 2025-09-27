@@ -1,12 +1,16 @@
+## Important
+
+This library will be updated to major minecraft versions only in the future.
+
 # AdvancedChatHUD
 
 AdvancedChatHUD is an overhaul of Minecraft chat HUD adding many new features.
 
-Please submit bugs to the [issue tracker](https://github.com/DarkKronicle/AdvancedChatHUD/issues). Join the [Discord](https://discord.gg/WnaE3uZxDA) for more help!
+Please submit bugs to the [issue tracker](https://github.com/Arematics/AdvancedChatHUD/issues)
 
 ## Dependencies
 
-[AdvancedChatCore](https://github.com/DarkKronicle/AdvancedChatCore) is required to run the mod.
+[AdvancedChatCore](https://github.com/Arematics/AdvancedChatCore) is required to run the mod.
 
 ## Features
 
