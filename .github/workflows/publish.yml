@@ -53,6 +53,9 @@ jobs:
 
       - name: Build with Gradle
         id: build
+        env:
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
           ./gradlew remapJar -PcurrentTag="${CURRENT_TAG}" -PlastTag="${LAST_TAG}" --stacktrace
           

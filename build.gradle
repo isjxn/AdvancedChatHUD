@@ -23,8 +23,8 @@ repositories {
     maven {
         url = uri("https://maven.pkg.github.com/Arematics/AdvancedChatCore")
         credentials {
-            username = project.findProperty("gpr.user") ?: System.getenv("GPR_USER")
-            password = project.findProperty("gpr.key") ?: System.getenv("GPR_KEY")
+            username = findProperty("gpr.user")?.toString() ?: System.getenv("GITHUB_ACTOR")
+            password = findProperty("gpr.key")?.toString()  ?: System.getenv("GITHUB_TOKEN")
         }
     }
 }
