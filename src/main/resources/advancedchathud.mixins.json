@@ -8,9 +8,6 @@
     "MixinChatHud",
     "MixinMinecraftClient"
   ],
-  "reject": [
-    "fi.dy.masa.malilib.mixin.MixinInGameHud"
-  ],
   "injectors": {
     "defaultRequire": 1
   }
