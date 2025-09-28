@@ -10,6 +10,7 @@ package io.github.darkkronicle.advancedchathud;
 import io.github.darkkronicle.advancedchatcore.chat.ChatMessage;
 import io.github.darkkronicle.advancedchathud.tabs.AbstractChatTab;
 import io.github.darkkronicle.advancedchathud.tabs.CustomChatTab;
+import io.github.darkkronicle.advancedchathud.tabs.MainChatTab;
 import lombok.Getter;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
